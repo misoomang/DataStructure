@@ -78,7 +78,7 @@ class LinkList:
         flag = False
         while current is not None:
             if current.get_value() == value:
-                if not pre:
+                if not pre:         # 头节点是value
                     self._head = current.get_next()
                 else:
                     pre.set_next(current.get_next())

@@ -39,7 +39,8 @@ class Tree:
         while node_queue:
             node = node_queue.pop(0)
             if node.elem is not None:
-                print(node.elem)
+                # print(node.elem)
+                yield node.elem
             if node.left:
                 node_queue.append(node.left)
             if node.right:
@@ -50,6 +51,7 @@ class Tree:
         if root is None:
             return
         if root.elem is not None:
+            # yield root.elem
             print(root.elem)
         self.left_recursive(root.left)
         self.left_recursive(root.right)
@@ -63,7 +65,8 @@ class Tree:
         node = root
         while node or node_queue:
             while node:             # 遍历左子树节点
-                print(node.elem)
+                # print(node.elem)
+                yield node.elem
                 node_queue.append(node)
                 node = node.left
             node = node_queue.pop()
@@ -81,7 +84,8 @@ class Tree:
                 node_queue.append(node)
                 node = node.left
             node = node_queue.pop()
-            print(node.elem)
+            # print(node.elem)
+            yield node.elem
             node = node.right
 
     # 后续遍历(左右根)
@@ -102,20 +106,38 @@ class Tree:
             node_queue_2.append(node)
         while node_queue_2:
             node = node_queue_2.pop()
-            print(node.elem)
+            yield node.elem
+            # print(node.elem)
 
 
 if __name__ == '__main__':
     tree = Tree()
     for i in range(1, 10):
         tree.add(i)
-    print('层次遍历：')
-    print(tree.level_recursive(tree.root))
-    print('递归先序遍历：')
-    print(tree.left_recursive(tree.root))
-    print('非递归先序遍历：')
-    print(tree.left_recursive_1(tree.root))
-    print('中序遍历：')
-    print(tree.middle_recursive(tree.root))
-    print('后序遍历：')
-    print(tree.last_recursive(tree.root))
+    level_recursive_list = []
+    for i in tree.level_recursive(tree.root):
+        level_recursive_list.append(i)
+    print('层次遍历：', level_recursive_list)
+
+    left_recursive_list = []
+    for i in tree.left_recursive_1(tree.root):
+        left_recursive_list.append(i)
+    print('非递归先序遍历：', left_recursive_list)
+
+    middle_recursive_list = []
+    for i in tree.middle_recursive(tree.root):
+        middle_recursive_list.append(i)
+    print('中序遍历：', middle_recursive_list)
+
+    last_recursive_list = []
+    for i in tree.last_recursive(tree.root):
+        last_recursive_list.append(i)
+    print('后序遍历：', last_recursive_list)
+
+    # print('递归先序遍历：')
+    # print(tree.left_recursive(tree.root))
+
+    # print('中序遍历：')
+    # print(tree.middle_recursive(tree.root))
+    # print('后序遍历：')
+    # print(tree.last_recursive(tree.root))
