@@ -44,7 +44,7 @@ class BTS:
         if not flag:
             return False
         else:
-            if node.left is None and node.right is None:        # 叶子节点
+            if node.left is None and node.right is None:        # 叶子节点，直接删除
                 parent.left = None
                 parent.right = None
             elif node.left is None and node.right:  # 没有左孩子，有右孩子
@@ -59,17 +59,19 @@ class BTS:
                     parent.right = node.left
             else:           # 左右子树都不为空
                 pre = node.right
+                print(pre.elem)
                 if pre.left is None:
                     node.elem = pre.elem
                     node.right = pre.right
                     del pre
                 else:
-                    next_node = node.left
-                    while next_node:
+                    next_node = pre.left
+                    while next_node and next_node.right:
                         pre = next_node
                         next_node = next_node.right
-                    node.data = next_node.data
-                    pre.right = next_node.left
+                    if next_node:
+                        node.elem = next_node.elem
+                        pre.left = next_node.left
             return True
 
     def find_min(self, root):
@@ -104,7 +106,7 @@ class BTS:
         while node_queue:
             node = node_queue.pop(0)
             if node.elem is not None:
-                print(node.elem)
+                yield node.elem
             if node.left:
                 node_queue.append(node.left)
             if node.right:
@@ -113,10 +115,11 @@ class BTS:
 
 if __name__ == '__main__':
     tree = BTS()
-    for i in [62, 88, 58, 47, 35, 73, 51, 99, 37, 93]:
+    for i in [62, 88, 58, 47, 35, 73, 51, 99, 37, 93, 91, 100, 86, 101]:
         tree.insert_num(i)
     # tree.level_recursive(tree.root)
-    # print('max:', tree.find_max(tree.root))
-    # print('min:', tree.find_min(tree.root))
-    print(tree.delete_num(47))
-    tree.level_recursive(tree.root)
+    print('max:', tree.find_max(tree.root))
+    print('min:', tree.find_min(tree.root))
+    print('删除前：', [i for i in tree.level_recursive(tree.root)])
+    print(tree.delete_num(99))
+    print('删除后：', [i for i in tree.level_recursive(tree.root)])
